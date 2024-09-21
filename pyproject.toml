@@ -1,0 +1,27 @@
+[tool.poetry]
+package-mode = false
+name = "code-star-cli"
+version = "0.1.0"
+description = "CodeStar is an advanced AI-powered coding assistant designed to enhance developer productivity by providing intelligent code suggestions and natural language interactions. Built on Hugging Face's StarCoder 2 (15B) and StarChat 2 15B."
+authors = ["Yousef Abu Shanab <josephyousef249@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/youzarsiph/code-star-cli"
+repository = "https://github.com/youzarsiph/code-star-cli"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+huggingface-hub = "^0.25.0"
+python-dotenv = "^1.0.1"
+typer = "^0.12.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+ruff = "^0.5.7"
+
+[tool.poetry.scripts]
+code-star = "app:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
