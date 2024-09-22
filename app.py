@@ -40,9 +40,7 @@ def ai(prompt: Annotated[str, typer.Argument(help="Natural language prompt")]) -
             messages=[
                 {
                     "role": "system",
-                    "content": "You are CodeStar, an advanced AI assistant. "
-                    "Your task is to assist users with daily tasks by providing clear explanations and help. "
-                    "Keep interactions friendly and supportive.",
+                    "content": "You are CodeStar, an advanced AI assistant. Keep interactions friendly and supportive.",
                 },
                 {"role": "user", "content": prompt},
             ],
@@ -57,17 +55,23 @@ def ai(prompt: Annotated[str, typer.Argument(help="Natural language prompt")]) -
 
 @cli.command()
 def chat(
-    sys_message: Annotated[
-        Optional[str],
-        typer.Option("--sys-message", "-sm", help=""),
-    ] = None,
     export: Annotated[
         Optional[typer.FileTextWrite],
-        typer.Option("--export", "-e", help="", rich_help_panel="", encoding="utf-8"),
+        typer.Option(
+            "--export",
+            "-e",
+            help="File to export chat history",
+            encoding="utf-8",
+        ),
     ] = None,
     history: Annotated[
         Optional[typer.FileText],
-        typer.Option("--history", "-h", help="", rich_help_panel="", encoding="utf-8"),
+        typer.Option(
+            "--history",
+            "-h",
+            help="File to import chat history",
+            encoding="utf-8",
+        ),
     ] = None,
 ) -> None:
     """
@@ -77,8 +81,6 @@ def chat(
     Examples:
     ```bash
     code-star chat
-    # Customize system message
-    code-star chat -sm "You are a helpful coding assistant"
     # Export chat history
     code-star chat -e chat_history.json
     # Import chat history
@@ -95,10 +97,6 @@ def chat(
     # Import chat history if provided
     if history:
         messages = json.load(history)
-
-    # Add system message if provided
-    if sys_message and not history:
-        messages.append({"role": "system", "content": sys_message})
 
     # Help message
     print("CodeStar Chat:\nType [red]exit[/red] or [red]quit[/red] to exit")
@@ -136,7 +134,7 @@ def chat(
 
 
 @cli.command()
-def completions(code: Annotated[str, typer.Argument(help="")]) -> None:
+def completions(code: Annotated[str, typer.Argument(help="Code to complete")]) -> None:
     """
     Get code completions from CodeStar
 
@@ -160,7 +158,12 @@ def completions(code: Annotated[str, typer.Argument(help="")]) -> None:
 
 
 @cli.command()
-def scan(code: Annotated[typer.FileText, typer.Argument(help="")]) -> None:
+def scan(
+    code: Annotated[
+        typer.FileText,
+        typer.Argument(help="File to scan for vulnerabilities"),
+    ]
+) -> None:
     """
     Perform code scanning with CodeStar
 

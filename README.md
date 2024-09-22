@@ -1,6 +1,6 @@
 # code-star-cli
 
-[![CI](https://github.com/youzarsiph/code-star-cli/actions/workflows/django.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/django.yml)
+[![CI](https://github.com/youzarsiph/code-star-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/ci.yml)
 [![Black](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml)
 [![Ruff](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml)
 
