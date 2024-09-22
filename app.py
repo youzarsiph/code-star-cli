@@ -182,7 +182,7 @@ def scan(
             messages=[
                 {
                     "role": "system",
-                    "content": "You are CodeStar, an advanced AI coding assistant.",
+                    "content": "You are CodeStar, an advanced AI coding assistant and security expert.",
                 },
                 {
                     "role": "user",
