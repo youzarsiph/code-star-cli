@@ -1,4 +1,4 @@
-""" CodeStar CLI """
+"""CodeStar CLI - An advanced AI-powered coding assistant."""
 
 import json
 from typing import Annotated, Dict, List, Literal, Optional
@@ -9,22 +9,35 @@ from rich import print
 from rich.console import Console
 from rich.syntax import Syntax
 
-
 # Constants
 CHAT_LLM = "HuggingFaceH4/starchat2-15b-v0.1"
 COMPLETION_LLM = "bigcode/starcoder2-15b"
+SYSTEM_MESSAGE = {
+    "role": "system",
+    "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
+    " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
+    "programming languages from a diverse set of permissively licensed data, including "
+    "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
+    "performance in coding tasks.",
+}
 
 # CLI
 code_star = typer.Typer(
+    name="code-star",
     no_args_is_help=True,
     rich_markup_mode="rich",
     help="CodeStar CLI. CodeStar is an advanced AI-powered coding assistant.",
 )
 
 
-# Syntax highlight
+# Syntax Highlighting
 def print_highlighted(code: str) -> None:
-    """Highlight given code then prints it"""
+    """
+    Highlight and print the provided code.
+
+    Args:
+        code (str): The code to be highlighted and printed.
+    """
 
     console = Console()
     highlighted_code = Syntax(
@@ -34,42 +47,30 @@ def print_highlighted(code: str) -> None:
         code_width=120,
         word_wrap=True,
         background_color="default",
-        indent_guides=True,
-        padding=1,
     )
 
     console.print(highlighted_code)
 
 
 @code_star.command()
-def ai(prompt: Annotated[str, typer.Argument(help="Natural language prompt")]) -> None:
+def ai(
+    prompt: Annotated[
+        str, typer.Argument(help="Natural language prompt for command generation.")
+    ]
+) -> None:
     """
-    Generate shell commands using natural language.
+    Generate shell commands based on a natural language prompt.
 
-    \b
-    Example:
-    ```bash
-    code-star ai 'How to navigate the file system in terminal'
-    ```
+    Args:
+        prompt (str): The natural language prompt from which to generate a command.
     """
 
-    # HF Inference client
     client = InferenceClient(CHAT_LLM)
 
     try:
         response = client.chat_completion(
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
-                    " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
-                    "programming languages from a diverse set of permissively licensed data, including "
-                    "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
-                    "performance in coding tasks.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=512,
+            messages=[SYSTEM_MESSAGE, {"role": "user", "content": prompt}],
+            max_tokens=1024,
         )
 
         print("[bold blue]CodeStar[/bold blue]:")
@@ -86,7 +87,7 @@ def chat(
         typer.Option(
             "--export",
             "-e",
-            help="File to export chat history",
+            help="File to export chat history.",
             encoding="utf-8",
         ),
     ] = None,
@@ -95,53 +96,32 @@ def chat(
         typer.Option(
             "--history",
             "-h",
-            help="File to import chat history",
+            help="File to import previous chat history.",
             encoding="utf-8",
         ),
     ] = None,
 ) -> None:
     """
-    Chat with CodeStar
+    Engage in a chat session with CodeStar.
 
-    \b
-    Examples:
-    ```bash
-    code-star chat
-    # Export chat history
-    code-star chat -e chat_history.json
-    # Import chat history
-    code-star chat -h chat_history.json
-    ```
+    Args:
+        export (Optional[typer.FileTextWrite]): Optional file to save chat history.
+        history (Optional[typer.FileText]): Optional file to load previous chat history.
     """
 
-    # HF Inference client
     client = InferenceClient(CHAT_LLM)
 
-    # Chat history
-    messages: List[Dict[Literal["role", "content"], str]] = [
-        {
-            "role": "system",
-            "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
-            " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
-            "programming languages from a diverse set of permissively licensed data, including "
-            "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
-            "performance in coding tasks.",
-        }
-    ]
+    messages: List[Dict[Literal["role", "content"], str]] = [SYSTEM_MESSAGE]
 
-    # Import chat history if provided
     if history:
         messages = json.load(history)
 
-    # Help message
     print(
         "CodeStar Chat\n"
         "Type [bold red]exit[/bold red] or [bold red]quit[/bold red] to exit\n"
     )
 
-    # Chat loop
     while True:
-        # User message
         message = typer.prompt(
             typer.style("You", fg=typer.colors.GREEN, bold=True),
             type=str,
@@ -150,15 +130,12 @@ def chat(
         if message in ("exit", "quit"):
             break
 
-        # Add to chat history
         messages.append({"role": "user", "content": message})
 
         try:
-            # LLM message
             response = client.chat_completion(messages=messages, max_tokens=2048)
             llm_message = str(response.choices[0].message.content)
 
-            # Add to chat history
             messages.append({"role": "assistant", "content": llm_message})
 
             print("[bold blue]CodeStar[/bold blue]:")
@@ -166,32 +143,27 @@ def chat(
 
         except Exception as error:
             print(f"[bold red]Error[/bold red]: {error}")
-
-            # Exit chat loop
             break
 
-    # Export chat history
     if export:
         json.dump(messages, export, indent=2)
 
 
 @code_star.command()
-def completions(code: Annotated[str, typer.Argument(help="Code to complete")]) -> None:
+def completions(
+    code: Annotated[str, typer.Argument(help="Code snippet to complete.")]
+) -> None:
     """
-    Get code completions from CodeStar
+    Generate code completions based on the provided code snippet.
 
-    \b
-    Example:
-    ```bash
-    code-pilot completions 'fn read_file(path: PathBuf) -> Result<String, Error> {'
-    ```
+    Args:
+        code (str): The code to complete.
     """
 
-    # HF Inference client
     client = InferenceClient(COMPLETION_LLM)
 
     try:
-        generated_code = client.text_generation(code, max_new_tokens=128)
+        generated_code = client.text_generation(code, max_new_tokens=1024)
 
         print("[bold blue]CodeStar[/bold blue]:")
         print_highlighted(code + generated_code)
@@ -201,42 +173,69 @@ def completions(code: Annotated[str, typer.Argument(help="Code to complete")]) -
 
 
 @code_star.command()
-def scan(
+def enhance(
     code: Annotated[
         typer.FileText,
-        typer.Argument(help="File to scan for vulnerabilities"),
+        typer.Argument(
+            help="File containing code to enhance for quality improvements."
+        ),
     ]
 ) -> None:
     """
-    Perform code scans with CodeStar for vulnerabilities
+    Improve code quality by applying best practices.
 
-    \b
-    Example:
-    ```bash
-    code-pilot scan code.py
-    ```
+    Args:
+        code (typer.FileText): The file containing code to be enhanced.
     """
 
-    # HF Inference client
     client = InferenceClient(CHAT_LLM)
 
     try:
         response = client.chat_completion(
             messages=[
-                {
-                    "role": "system",
-                    "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
-                    " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
-                    "programming languages from a diverse set of permissively licensed data, including "
-                    "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
-                    "performance in coding tasks.",
-                },
+                SYSTEM_MESSAGE,
                 {
                     "role": "user",
-                    "content": f"Perform a code scan to identify security vulnerabilities :\n{code.read()}",
+                    "content": "Apply best practices, enhancements, and industry standards to the provided "
+                    f"code to make it more efficient, secure, and maintainable:\n{code.read()}",
                 },
             ],
-            max_tokens=512,
+            max_tokens=2048,
+        )
+
+        print("[bold blue]CodeStar[/bold blue]:")
+        print_highlighted(response.choices[0].message.content)
+
+    except Exception as error:
+        print(f"[bold red]Error[/bold red]: {error}")
+
+
+@code_star.command()
+def scan(
+    code: Annotated[
+        typer.FileText,
+        typer.Argument(help="File containing code to scan for vulnerabilities."),
+    ]
+) -> None:
+    """
+    Scan the provided code for security vulnerabilities.
+
+    Args:
+        code (typer.FileText): The file containing code to be scanned.
+    """
+
+    client = InferenceClient(CHAT_LLM)
+
+    try:
+        response = client.chat_completion(
+            messages=[
+                SYSTEM_MESSAGE,
+                {
+                    "role": "user",
+                    "content": f"Perform a code scan to identify security vulnerabilities:\n{code.read()}",
+                },
+            ],
+            max_tokens=1024,
         )
 
         print("[bold blue]CodeStar[/bold blue]:")
@@ -247,7 +246,7 @@ def scan(
 
 
 if __name__ == "__main__":
-    # Load secrets
+    # Load environment variables
     load_dotenv(override=True)
 
     code_star()

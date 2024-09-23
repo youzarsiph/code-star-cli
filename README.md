@@ -26,53 +26,72 @@ With its strong performance and versatility, CodeStar is poised to be an invalua
 
 Join us in revolutionizing the coding experience!
 
-## Usage
+## Usage Instructions
 
-Get help:
+### Assistance
+
+To obtain help, please execute the following command:
 
 ```bash
 code-star --help
 ```
 
-### Generate commands
+### Command Generation
 
-Generate shell commands using natural language:
+You can generate shell commands using natural language as follows:
 
 ```bash
-code-star ai 'bash list all process that use more than 10% of memory'
+code-star ai 'bash list all processes that use more than 10% of memory'
 ```
 
-### Chat
+### Interactive Chat
 
-Chat with CodeStar:
+Engage in a conversation with CodeStar using the following command:
 
 ```bash
 code-star chat
+```
 
-# Export chat history
+To export your chat history, use:
+
+```bash
 code-star chat -e chat-history.json
+```
 
-# Import chat history
+To import a previous chat history, execute:
+
+```bash
 code-star chat -h chat-history.json
+```
 
-# Import chat history then export it after chat session
+If you wish to import chat history and subsequently export it after your chat session, utilize:
+
+```bash
 code-star chat -h chat-history.json -e chat-history.json
 ```
 
-### Code completions
+### Code Completions
 
-Get code completions from CodeSta
+Retrieve code completions from CodeStar with the following command:
 
 ```bash
 code-star completions 'fn read_file(path: PathBuf)'
 ```
 
-### Code scans
+### Code Enhancements
 
-Perform code scanning with CodeStar
+Utilize CodeStar to apply best practices for improving code quality as shown below:
 
 ```bash
-code-star scan code.py
+code-star enhance app.py
+```
+
+### Code Scanning
+
+Conduct code scanning with CodeStar by executing:
+
+```bash
+code-star scan hello.py
 ```
 
 ## License
