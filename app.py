@@ -6,6 +6,8 @@ import typer
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from rich import print
+from rich.console import Console
+from rich.syntax import Syntax
 
 
 # Constants
@@ -13,14 +15,33 @@ CHAT_LLM = "HuggingFaceH4/starchat2-15b-v0.1"
 COMPLETION_LLM = "bigcode/starcoder2-15b"
 
 # CLI
-cli = typer.Typer(
+code_star = typer.Typer(
     no_args_is_help=True,
     rich_markup_mode="rich",
     help="CodeStar CLI. CodeStar is an advanced AI-powered coding assistant.",
 )
 
 
-@cli.command()
+# Syntax highlight
+def print_highlighted(code: str) -> None:
+    """Highlight given code then prints it"""
+
+    console = Console()
+    highlighted_code = Syntax(
+        code,
+        "markdown",
+        theme="github-dark",
+        code_width=120,
+        word_wrap=True,
+        background_color="default",
+        indent_guides=True,
+        padding=1,
+    )
+
+    console.print(highlighted_code)
+
+
+@code_star.command()
 def ai(prompt: Annotated[str, typer.Argument(help="Natural language prompt")]) -> None:
     """
     Generate shell commands using natural language.
@@ -40,20 +61,25 @@ def ai(prompt: Annotated[str, typer.Argument(help="Natural language prompt")]) -
             messages=[
                 {
                     "role": "system",
-                    "content": "You are CodeStar, an advanced AI assistant. Keep interactions friendly and supportive.",
+                    "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
+                    " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
+                    "programming languages from a diverse set of permissively licensed data, including "
+                    "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
+                    "performance in coding tasks.",
                 },
                 {"role": "user", "content": prompt},
             ],
             max_tokens=512,
         )
 
-        print(f"[green]CodeStar[/green]: {response.choices[0].message.content}")
+        print("[bold blue]CodeStar[/bold blue]:")
+        print_highlighted(response.choices[0].message.content)
 
     except Exception as error:
-        print(f"[red]Error[/red]: {error}")
+        print(f"[bold red]Error[/bold red]: {error}")
 
 
-@cli.command()
+@code_star.command()
 def chat(
     export: Annotated[
         Optional[typer.FileTextWrite],
@@ -92,19 +118,34 @@ def chat(
     client = InferenceClient(CHAT_LLM)
 
     # Chat history
-    messages: List[Dict[Literal["role", "content"], str]] = []
+    messages: List[Dict[Literal["role", "content"], str]] = [
+        {
+            "role": "system",
+            "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
+            " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
+            "programming languages from a diverse set of permissively licensed data, including "
+            "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
+            "performance in coding tasks.",
+        }
+    ]
 
     # Import chat history if provided
     if history:
         messages = json.load(history)
 
     # Help message
-    print("CodeStar Chat:\nType [red]exit[/red] or [red]quit[/red] to exit")
+    print(
+        "CodeStar Chat\n"
+        "Type [bold red]exit[/bold red] or [bold red]quit[/bold red] to exit\n"
+    )
 
     # Chat loop
     while True:
         # User message
-        message = typer.prompt(typer.style("You", fg="green", bold=True), type=str)
+        message = typer.prompt(
+            typer.style("You", fg=typer.colors.GREEN, bold=True),
+            type=str,
+        )
 
         if message in ("exit", "quit"):
             break
@@ -120,20 +161,21 @@ def chat(
             # Add to chat history
             messages.append({"role": "assistant", "content": llm_message})
 
-            print(f"[green]CodeStar[/green]: {llm_message}\n")
+            print("[bold blue]CodeStar[/bold blue]:")
+            print_highlighted(llm_message)
 
         except Exception as error:
-            print(f"[red]Error[/red]: {error}")
+            print(f"[bold red]Error[/bold red]: {error}")
 
             # Exit chat loop
             break
 
     # Export chat history
     if export:
-        json.dump(messages, export)
+        json.dump(messages, export, indent=2)
 
 
-@cli.command()
+@code_star.command()
 def completions(code: Annotated[str, typer.Argument(help="Code to complete")]) -> None:
     """
     Get code completions from CodeStar
@@ -151,13 +193,14 @@ def completions(code: Annotated[str, typer.Argument(help="Code to complete")]) -
     try:
         generated_code = client.text_generation(code, max_new_tokens=128)
 
-        print(f"[green]CodeStar[/green]: {code + generated_code}")
+        print("[bold blue]CodeStar[/bold blue]:")
+        print_highlighted(code + generated_code)
 
     except Exception as error:
-        print(f"[red]Error[/red]: {error}")
+        print(f"[bold red]Error[/bold red]: {error}")
 
 
-@cli.command()
+@code_star.command()
 def scan(
     code: Annotated[
         typer.FileText,
@@ -165,7 +208,7 @@ def scan(
     ]
 ) -> None:
     """
-    Perform code scanning with CodeStar
+    Perform code scans with CodeStar for vulnerabilities
 
     \b
     Example:
@@ -182,7 +225,11 @@ def scan(
             messages=[
                 {
                     "role": "system",
-                    "content": "You are CodeStar, an advanced AI coding assistant and security expert.",
+                    "content": "You are CodeStar, an advanced coding assistant powered by StarCoder 2,"
+                    " a state-of-the-art Large Language Model for Code (Code LLM) trained on over 600 "
+                    "programming languages from a diverse set of permissively licensed data, including "
+                    "GitHub code, Arxiv, and Wikipedia. CodeStar is specifically optimized for enhanced "
+                    "performance in coding tasks.",
                 },
                 {
                     "role": "user",
@@ -192,14 +239,15 @@ def scan(
             max_tokens=512,
         )
 
-        print(f"[green]CodeStar[/green]: {response.choices[0].message.content}")
+        print("[bold blue]CodeStar[/bold blue]:")
+        print_highlighted(response.choices[0].message.content)
 
     except Exception as error:
-        print(f"[red]Error[/red]: {error}")
+        print(f"[bold red]Error[/bold red]: {error}")
 
 
 if __name__ == "__main__":
     # Load secrets
     load_dotenv(override=True)
 
-    cli()
+    code_star()
