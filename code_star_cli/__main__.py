@@ -1,6 +1,6 @@
 """ Allows to run the cli using python -m """
 
-from code_star_cli.app import code_star
+from code_star_cli.main import code_star
 
 
 # Run the cli

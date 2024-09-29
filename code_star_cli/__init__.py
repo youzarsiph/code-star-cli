@@ -1,4 +1,4 @@
-""" CodeStar CLI """
+""" CodeStar CLI: CodeStar is an advanced coding assistant powered by StarCoder 2 """
 
 from rich.console import Console
 from rich.markdown import Markdown
@@ -34,6 +34,6 @@ def print_highlighted(code: str) -> None:
         Panel(
             md,
             title_align="left",
-            title="[bold green]CodePilot[/bold green]",
+            title="[bold green]CodeStar[/bold green]",
         )
     )

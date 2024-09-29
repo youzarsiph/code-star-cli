@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "code-star-cli"
-version = "0.1.1"
+version = "0.1.2"
 description = "CodeStar is an advanced AI-powered coding assistant designed to enhance developer productivity by providing intelligent code suggestions and natural language interactions. Built on Hugging Face's StarCoder 2 (15B) and StarChat 2 15B."
 authors = ["Yousef Abu Shanab <josephyousef249@gmail.com>"]
 license = "MIT"

@@ -1,4 +1,4 @@
-""" Command to chat with CodePilot """
+""" Command to chat with CodeStar """
 
 import json
 from typing import Annotated, Dict, List, Literal, Optional
@@ -29,7 +29,7 @@ def chat(
     ] = None,
 ) -> None:
     """
-    Engage in a chat session with CodePilot.
+    Engage in a chat session with CodeStar.
 
     Args:
         export (Optional[typer.FileTextWrite]): Optional file to save chat history.

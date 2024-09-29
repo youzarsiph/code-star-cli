@@ -1,6 +1,7 @@
 # code-star-cli
 
 [![CI](https://github.com/youzarsiph/code-star-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/ci.yml)
+[![CD](https://github.com/youzarsiph/code-star-cli/actions/workflows/cd.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/cd.yml)
 [![Black](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml)
 [![Ruff](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml)
 
@@ -49,7 +50,7 @@ code-star ai 'bash list all processes that use more than 10% of memory'
 Engage in a conversation with CodeStar using the following command:
 
 ```bash
-code-star chat
+code-star chat --
 ```
 
 To export your chat history, use:

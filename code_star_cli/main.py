@@ -14,7 +14,7 @@ code_star = typer.Typer(
 
 # Add the commands
 for command in command_list:
-    code_star.command()(command)
+    code_star.command(no_args_is_help=True)(command)
 
 
 if __name__ == "__main__":
