@@ -15,11 +15,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
 
-          
+      - name: Create virtual env
+        run: |
+          python -m venv .venv
+
       - name: Install Dependencies
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install poetry
+          python -m poetry build
+          python -m poetry install
 
       - name: Run the cli
-        run: python app.py --help
+        run: |
+          source .venv/bin/activate
+          python -m code_star_cli --help
