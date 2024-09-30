@@ -77,5 +77,31 @@ def chat(
             print(f"[bold red]Error[/bold red]: {error}")
             break
 
+    export_requested = False
+
+    if not export:
+        export_requested: bool = typer.prompt(
+            "Do you want to save this chat?",
+            type=bool,
+            default=False,
+            show_default=True,
+            confirmation_prompt=True,
+        )
+
+        if export_requested:
+            file_name: str = typer.prompt(
+                "Enter a file name to save the chat history",
+                type=str,
+                default="chat_history.json",
+            )
+
+            # Ensure the file type is JSON
+            file_name = (
+                file_name if file_name.endswith(".json") else file_name + ".json"
+            )
+
+            with open(file_name, "w", encoding="utf-8") as file:
+                json.dump(messages, file, indent=2)
+
     if export:
         json.dump(messages, export, indent=2)
