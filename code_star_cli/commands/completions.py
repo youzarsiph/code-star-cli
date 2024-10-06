@@ -4,7 +4,7 @@ from typing import Annotated
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_pilot_cli import COMPLETION_LLM, print_highlighted
+from code_star_cli import COMPLETION_LLM, print_highlighted
 
 
 def completions(

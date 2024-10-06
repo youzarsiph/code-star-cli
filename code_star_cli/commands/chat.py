@@ -5,7 +5,7 @@ from typing import Annotated, Dict, List, Literal, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_pilot_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
+from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
 
 
 def chat(

@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_pilot_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
+from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
 
 
 def ai(
@@ -38,7 +38,9 @@ def ai(
                 SYSTEM_MESSAGE,
                 {
                     "role": "user",
-                    "content": prompt + ":\n" + code.read() if not code else prompt,
+                    "content": (
+                        f"{prompt}:\n```\n{code.read()}\n```" if code else prompt
+                    ),
                 },
             ],
             max_tokens=1024,
