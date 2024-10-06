@@ -28,9 +28,11 @@ def scan(
                 SYSTEM_MESSAGE,
                 {
                     "role": "user",
-                    "content": "As a senior cybersecurity engineer, senior software engineer "
-                    "and senior site reliability engineer, perform a code scan to identify "
-                    f"potential security vulnerabilities in the provided code:\n{code.read()}",
+                    "content": "As a an expert software engineer and cybersecurity engineer "
+                    "that puts code into production in large scale systems. Your job is to ensure "
+                    "that code runs effectively, quickly, at scale, and securely. Please perform a "
+                    "code scan to identify potential security vulnerabilities in the provided code:"
+                    f"\n{code.read()}",
                 },
             ],
             max_tokens=1024,

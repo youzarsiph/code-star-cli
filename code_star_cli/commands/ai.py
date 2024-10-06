@@ -1,6 +1,6 @@
 """ Command to generate shell commands """
 
-from typing import Annotated
+from typing import Annotated, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
@@ -11,19 +11,36 @@ def ai(
     prompt: Annotated[
         str, typer.Argument(help="Natural language prompt for command generation.")
     ],
+    code: Annotated[
+        Optional[typer.FileText],
+        typer.Option(
+            "--code",
+            "-c",
+            exists=True,
+            help="Code file to include in the prompt.",
+            encoding="utf-8",
+        ),
+    ] = None,
 ) -> None:
     """
     Generate shell commands based on a natural language prompt.
 
     Args:
         prompt (str): The natural language prompt from which to generate a command.
+        code: (Optional[str]): Code file to include in the prompt.
     """
 
     client = InferenceClient(CHAT_LLM)
 
     try:
         response = client.chat_completion(
-            messages=[SYSTEM_MESSAGE, {"role": "user", "content": prompt}],
+            messages=[
+                SYSTEM_MESSAGE,
+                {
+                    "role": "user",
+                    "content": prompt + ":\n" + code.read() if not code else prompt,
+                },
+            ],
             max_tokens=1024,
         )
 

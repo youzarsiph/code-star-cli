@@ -27,6 +27,30 @@ With its strong performance and versatility, CodeStar is poised to be an invalua
 
 Join us in revolutionizing the coding experience!
 
+## Getting Started
+
+To begin, install the package:
+
+```bash
+pip install code-star-cli
+```
+
+Export your `HF_TOKEN` as an environment variable, you can get your token from [HuggingFace](https://huggingface.co/settings/tokens):
+
+Bash:
+
+```bash
+export HF_TOKEN=hf_**********************************
+```
+
+Powershell:
+
+```powershell
+$env:HF_TOKEN = "hf_**********************************"
+```
+
+You are now ready to utilize the application.
+
 ## Usage Instructions
 
 ### Assistance

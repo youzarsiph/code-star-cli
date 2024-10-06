@@ -30,10 +30,12 @@ def enhance(
                 SYSTEM_MESSAGE,
                 {
                     "role": "user",
-                    "content": "As a senior software architect, senior software engineer and "
-                    "senior site reliability engineer, apply best practices, enhancements, and "
-                    "industry standards to the provided code to make it more efficient, secure, "
-                    f"and maintainable:\n{code.read()}",
+                    "content": "As a an expert software engineer and site reliability engineer "
+                    "that puts code into production in large scale systems. Your job is to ensure "
+                    "that code runs effectively, quickly, at scale, and securely. Please profile it, "
+                    "and find any issues that need to be fixed or updated. Also apply best practices, "
+                    "enhancements, and industry standards to the provided code to make it more efficient, "
+                    f"secure, and maintainable:\n{code.read()}",
                 },
             ],
             max_tokens=2048,
