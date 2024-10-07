@@ -20,6 +20,11 @@ def enhance(
 
     Args:
         code (typer.FileText): The file containing code to be enhanced.
+
+    Examples:
+    ```shell
+    code-star enhance code.py
+    ```
     """
 
     client = InferenceClient(CHAT_LLM)

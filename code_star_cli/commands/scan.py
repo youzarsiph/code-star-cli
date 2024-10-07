@@ -18,6 +18,11 @@ def scan(
 
     Args:
         code (typer.FileText): The file containing code to be scanned.
+
+    Examples:
+    ```shell
+    code-star scan code.py
+    ```
     """
 
     client = InferenceClient(CHAT_LLM)

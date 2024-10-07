@@ -34,6 +34,21 @@ def chat(
     Args:
         export (Optional[typer.FileTextWrite]): Optional file to save chat history.
         history (Optional[typer.FileText]): Optional file to load previous chat history.
+
+    Examples:
+    ```shell
+    # Star chatting
+    code-star chat --
+
+    # Export chat history
+    code-star chat -e chat_history.json
+
+    # Import chat history
+    code-star chat -h chat_history.json
+
+    # Import chat history then export it after the chat session
+    code-star chat -h chat_history.json -e chat_history.json
+    ```
     """
 
     client = InferenceClient(CHAT_LLM)

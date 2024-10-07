@@ -4,6 +4,7 @@ import typer
 from code_star_cli.commands import command_list
 
 
+# CodeStar CLI
 code_star = typer.Typer(
     name="code-star",
     no_args_is_help=True,

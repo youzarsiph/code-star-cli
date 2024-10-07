@@ -1,4 +1,4 @@
-""" Command to generate shell commands """
+""" Command for natural language interactions like command generation """
 
 from typing import Annotated, Optional
 import typer
@@ -8,9 +8,7 @@ from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
 
 
 def ai(
-    prompt: Annotated[
-        str, typer.Argument(help="Natural language prompt for command generation.")
-    ],
+    prompt: Annotated[str, typer.Argument(help="Natural language prompt.")],
     code: Annotated[
         Optional[typer.FileText],
         typer.Option(
@@ -23,11 +21,17 @@ def ai(
     ] = None,
 ) -> None:
     """
-    Generate shell commands based on a natural language prompt.
+    Interact with the CodeStar AI assistant using natural language.
 
     Args:
-        prompt (str): The natural language prompt from which to generate a command.
+        prompt (str): The natural language prompt.
         code: (Optional[str]): Code file to include in the prompt.
+
+    Examples:
+    ```shell
+    code-star ai "Generate a function to calculate the area of a circle"
+    code-star ai -c code.py "Explain the code"
+    ```
     """
 
     client = InferenceClient(CHAT_LLM)
