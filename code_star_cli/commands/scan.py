@@ -14,7 +14,7 @@ def scan(
     ],
 ) -> None:
     """
-    Scan the provided code for security vulnerabilities.
+    Scan the provided code for security vulnerabilities to provide suggestions on how to improve it.
 
     Args:
         code (typer.FileText): The file containing code to be scanned.

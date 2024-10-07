@@ -16,7 +16,7 @@ def enhance(
     ],
 ) -> None:
     """
-    Improve code quality by applying best practices.
+    Improve code quality by applying best practices and enhancements suggested by CodeStar.
 
     Args:
         code (typer.FileText): The file containing code to be enhanced.

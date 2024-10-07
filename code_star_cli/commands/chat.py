@@ -59,14 +59,8 @@ def chat(
         messages = json.load(history)
 
     print_highlighted(
-        "Hello and welcome to CodeStar! 🌟"
-        "We're thrilled to have you here! CodeStar is your advanced coding assistant, "
-        "powered by the incredible StarCoder 2 model. Whether you're tackling a new project, "
-        "debugging some tricky code, or simply exploring the vast world of programming across "
-        "over 600 languages, we're here to help every step of the way. With our cutting-edge technology "
-        "and robust capabilities, you can expect optimized support tailored to your coding needs. "
-        "So let's dive into the code together and unlock the full potential of your programming journey!"
-        "Happy coding! 🚀"
+        "Hi, how I can assist you today?",
+        "Type 'exit' or 'quit' to end the chat.",
     )
 
     while True:
