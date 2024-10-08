@@ -27,7 +27,7 @@ def print_highlighted(code: str, subtitle: Optional[str] = None) -> None:
 
     Args:
         code (str): The code to be highlighted and printed.
-        subtitle (Optional[str]): An optional subtitle for the panel.
+        subtitle (str, optional): An optional subtitle for the panel.
 
     Returns:
         None
