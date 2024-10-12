@@ -1,4 +1,4 @@
-""" Command to generate shell commands """
+""" Generate code completions """
 
 from typing import Annotated, Optional
 import typer
@@ -17,6 +17,15 @@ def completions(
             help="Programming language of the code snippet.",
         ),
     ] = None,
+    output: Annotated[
+        Optional[typer.FileTextWrite],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file to write the response to.",
+            encoding="utf-8",
+        ),
+    ] = None,
 ) -> None:
     """
     Generate code completions based on the provided code snippet.
@@ -28,6 +37,8 @@ def completions(
     Examples:
     ```shell
     code-star completions 'def hello_world():'
+    code-star completions -l python 'def hello_world():'
+    code-star completions -o code-completions.md 'def hello_world():'
     ```
     """
 
@@ -39,7 +50,14 @@ def completions(
             max_new_tokens=256,
         )
 
-        print_highlighted(f"```{language if language else ''}\n{code + response}")
+        if output:
+            with output as file:
+                file.write(f"```{language if language else ''}\n{code + response}")
+
+            print(f"Output [bold green]saved[/bold green] to {output.name}.")
+
+        else:
+            print_highlighted(f"```{language if language else ''}\n{code + response}")
 
     except Exception as error:
         print(f"[bold red]Error[/bold red]: {error}")

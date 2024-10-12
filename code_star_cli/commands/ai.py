@@ -1,4 +1,4 @@
-""" Command for natural language interactions like command generation """
+""" Natural language interactions like command generation """
 
 from typing import Annotated, Optional
 import typer
@@ -19,18 +19,28 @@ def ai(
             encoding="utf-8",
         ),
     ] = None,
+    output: Annotated[
+        Optional[typer.FileTextWrite],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file to write the response to.",
+            encoding="utf-8",
+        ),
+    ] = None,
 ) -> None:
     """
-    Interact with the CodeStar AI assistant using natural language.
+    Interact with CodeStar using natural language.
 
     Args:
         prompt (str): The natural language prompt.
-        code: (Optional[str]): Code file to include in the prompt.
+        code: (str, optional): Code file to include in the prompt.
 
     Examples:
     ```shell
     code-star ai "Generate a function to calculate the area of a circle"
     code-star ai -c code.py "Explain the code"
+    code-star ai -o output.md "How to install HuggingFace Transformers?"
     ```
     """
 
@@ -47,10 +57,17 @@ def ai(
                     ),
                 },
             ],
-            max_tokens=1024,
+            max_tokens=2048,
         )
 
-        print_highlighted(response.choices[0].message.content)
+        if output:
+            with output as file:
+                file.write(response.choices[0].message.content)
+
+            print(f"Output [bold green]saved[/bold green] to {output.name}.")
+
+        else:
+            print_highlighted(response.choices[0].message.content)
 
     except Exception as error:
         print(f"[bold red]Error[/bold red]: {error}")

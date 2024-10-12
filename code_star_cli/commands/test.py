@@ -1,4 +1,4 @@
-""" Perform code reviews using CodeStar """
+""" Generate tests for code """
 
 from typing import Annotated, Optional
 import typer
@@ -7,10 +7,10 @@ from rich import print
 from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
 
 
-def review(
+def test(
     code: Annotated[
         typer.FileText,
-        typer.Argument(help="File containing code to review for quality improvements."),
+        typer.Argument(help="File containing code to generate tests for."),
     ],
     output: Annotated[
         Optional[typer.FileTextWrite],
@@ -23,16 +23,15 @@ def review(
     ] = None,
 ) -> None:
     """
-    Perform code reviews to analyze code quality and adherence to best practices,
-    to provide developers with suggestions for improvement
+    Generate tests for the provided code.
 
     Args:
-        code (typer.FileText): The file containing code to be reviewed.
+        code (typer.FileText): The file containing code to be documented.
 
     Examples:
     ```shell
-    code-star review code.py
-    code-star review code.py -o code-review.md
+    code-star test code.py
+    code-star test code.py -o code-tests.md
     ```
     """
 
@@ -44,11 +43,13 @@ def review(
                 SYSTEM_MESSAGE,
                 {
                     "role": "user",
-                    "content": "As a an expert software engineer and site reliability engineer "
+                    "content": "As a an expert software engineer and quality assurance engineer "
                     "that puts code into production in large scale systems. Your job is to ensure "
-                    "that code runs effectively, quickly, at scale, and securely. Please review and "
-                    "analyze code quality and adherence to best practices, providing developers with "
-                    f"suggestions for improvement:\n{code.read()}",
+                    "that code runs effectively, quickly, at scale, and securely. Please generate tests "
+                    "for the provided code, including any potential issues or improvements that could be made, "
+                    "and provide the updated code with the tests included. The tests should cover edge cases, "
+                    "error handling, and any other relevant information that could help with the code's functionality:"
+                    f"{code.read()}",
                 },
             ],
             max_tokens=2048,

@@ -1,4 +1,4 @@
-""" Command to chat with CodeStar """
+""" Chat with CodeStar """
 
 import json
 from typing import Annotated, Dict, List, Literal, Optional
@@ -101,7 +101,7 @@ def chat(
             file_name: str = typer.prompt(
                 "Enter a file name to save the chat history",
                 type=str,
-                default="chat_history.json",
+                default="chat-history.json",
             )
 
             # Ensure the file type is JSON
