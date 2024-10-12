@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,28 +27,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
 
-      - name: Create virtual env
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           python -m venv .venv
-
-      - name: Install Poetry
-        run: |
           source .venv/bin/activate
-          python -m pip install --upgrade pip
-          pip install poetry
-
-      - name: Install dependencies
-        run: |
-          source .venv/bin/activate
-          poetry install
-
-      - name: Build package
-        run: |
-          source .venv/bin/activate
-          poetry build
+          python -m pip install poetry
+          python -m poetry install
+          python -m poetry build
 
       - name: Publish package
         run: |
           source .venv/bin/activate
-          poetry publish --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
+          python -m poetry publish --username __token__ --password ${{ secrets.PYPI_API_TOKEN }}
