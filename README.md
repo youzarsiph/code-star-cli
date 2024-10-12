@@ -4,6 +4,12 @@
 [![CD](https://github.com/youzarsiph/code-star-cli/actions/workflows/cd.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/cd.yml)
 [![Black](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/black.yml)
 [![Ruff](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml/badge.svg)](https://github.com/youzarsiph/code-star-cli/actions/workflows/ruff.yml)
+[![PyPI - Version](https://img.shields.io/pypi/v/code-star-cli?logo=pypi&logoColor=white)](https://pypi.org/project/code-star-cli/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/code-star-cli?logo=python&logoColor=white)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/code-star-cli?logo=pypi&logoColor=white)
+![PyPI - Format](https://img.shields.io/pypi/format/code-star-cli?logo=pypi&logoColor=white)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/code-star-cli?logo=pypi&logoColor=white)
+![PyPI - License](https://img.shields.io/pypi/l/code-star-cli?logo=pypi&logoColor=white)
 
 Welcome to the world of CodeStar, a cutting-edge AI-powered development tool designed to enhance your programming efficiency and productivity. By harnessing the power of StarCoder 2, a state-of-the-art LLM for code, CodeStar provides unparalleled assistance in various coding tasks, including AI-powered code completions, natural language processing, multi-language support, and seamless integration.
 
