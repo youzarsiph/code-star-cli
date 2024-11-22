@@ -1,11 +1,11 @@
 """ Chat with CodeStar """
 
 import json
-from typing import Annotated, Dict, List, Literal, Optional
+from typing import Annotated, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
+from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, create_panel
 
 
 def chat(
@@ -27,13 +27,17 @@ def chat(
             encoding="utf-8",
         ),
     ] = None,
+    max_tokens: Annotated[
+        Optional[int],
+        typer.Option(
+            "--max-tokens",
+            "-t",
+            help="Maximum number of tokens allowed in the response.",
+        ),
+    ] = 2048,
 ) -> None:
     """
     Engage in a chat session with CodeStar.
-
-    Args:
-        export (Optional[typer.FileTextWrite]): Optional file to save chat history.
-        history (Optional[typer.FileText]): Optional file to load previous chat history.
 
     Examples:
     ```shell
@@ -53,14 +57,17 @@ def chat(
 
     client = InferenceClient(CHAT_LLM)
 
-    messages: List[Dict[Literal["role", "content"], str]] = [SYSTEM_MESSAGE]
+    messages = [SYSTEM_MESSAGE]
 
     if history:
         messages = json.load(history)
 
-    print_highlighted(
-        "Hi, how I can assist you today?",
-        "Type 'exit' or 'quit' to end the chat.",
+    print(
+        create_panel(
+            "CodeStar",
+            "Hi, how I can assist you today?",
+            "Type 'exit' or 'quit' to end the chat.",
+        )
     )
 
     while True:
@@ -75,12 +82,12 @@ def chat(
         messages.append({"role": "user", "content": message})
 
         try:
-            response = client.chat_completion(messages=messages, max_tokens=2048)
+            response = client.chat_completion(messages=messages, max_tokens=max_tokens)
             llm_message = str(response.choices[0].message.content)
 
             messages.append({"role": "assistant", "content": llm_message})
 
-            print_highlighted(llm_message)
+            print(create_panel("CodeStar", llm_message))
 
         except Exception as error:
             print(f"[bold red]Error[/bold red]: {error}")
@@ -90,11 +97,11 @@ def chat(
 
     if not export:
         export_requested: bool = typer.prompt(
-            "Do you want to save this chat?",
+            "CodeStar: Do you want to save this chat?",
             type=bool,
             default=False,
             show_default=True,
-            confirmation_prompt=True,
+            prompt_suffix="",
         )
 
         if export_requested:

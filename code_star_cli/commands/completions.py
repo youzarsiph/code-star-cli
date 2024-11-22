@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_star_cli import COMPLETION_LLM, print_highlighted
+from code_star_cli import COMPLETION_LLM, create_panel
 
 
 def completions(
@@ -26,13 +26,17 @@ def completions(
             encoding="utf-8",
         ),
     ] = None,
+    max_tokens: Annotated[
+        Optional[int],
+        typer.Option(
+            "--max-tokens",
+            "-t",
+            help="Maximum number of tokens allowed in the response.",
+        ),
+    ] = 128,
 ) -> None:
     """
     Generate code completions based on the provided code snippet.
-
-    Args:
-        code (str): The code to complete.
-        language (str, optional): The programming language of the code snippet. Defaults to 'python'.
 
     Examples:
     ```shell
@@ -47,7 +51,7 @@ def completions(
     try:
         response = client.text_generation(
             f"```{language if language else ''}\n{code}",
-            max_new_tokens=256,
+            max_new_tokens=max_tokens,
         )
 
         if output:
@@ -57,7 +61,11 @@ def completions(
             print(f"Output [bold green]saved[/bold green] to {output.name}.")
 
         else:
-            print_highlighted(f"```{language if language else ''}\n{code + response}")
+            print(
+                create_panel(
+                    "CodeStar", f"```{language if language else ''}\n{code + response}"
+                )
+            )
 
     except Exception as error:
         print(f"[bold red]Error[/bold red]: {error}")

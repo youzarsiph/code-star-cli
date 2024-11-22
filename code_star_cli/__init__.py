@@ -1,7 +1,6 @@
 """ CodeStar CLI: CodeStar is an advanced coding assistant powered by StarCoder 2 """
 
 from typing import Optional
-from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 
@@ -20,28 +19,25 @@ SYSTEM_MESSAGE = {
 }
 
 
-# Syntax Highlighting
-def print_highlighted(code: str, subtitle: Optional[str] = None) -> None:
+def create_panel(title: str, content: str, subtitle: Optional[str] = None) -> Panel:
     """
     Highlight and print the provided code.
 
     Args:
-        code (str): The code to be highlighted and printed.
+        title (str): Panel title.
+        content (str): Panel content.
         subtitle (str, optional): An optional subtitle for the panel.
 
     Returns:
-        None
+        Panel
     """
 
-    console = Console()
-    md = Markdown(code, code_theme="github-dark", justify="left")
+    md = Markdown(content, code_theme="lightbulb")
 
-    console.print(
-        Panel(
-            md,
-            title_align="left",
-            title="[bold green]CodeStar[/bold green]",
-            subtitle=subtitle,
-            subtitle_align="right",
-        )
+    return Panel(
+        md,
+        title=f"[bold green]{title}[/bold green]",
+        title_align="left",
+        subtitle=subtitle,
+        subtitle_align="right",
     )

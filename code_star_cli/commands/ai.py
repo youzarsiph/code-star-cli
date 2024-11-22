@@ -4,7 +4,7 @@ from typing import Annotated, Optional
 import typer
 from huggingface_hub import InferenceClient
 from rich import print
-from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, print_highlighted
+from code_star_cli import CHAT_LLM, SYSTEM_MESSAGE, create_panel
 
 
 def ai(
@@ -28,13 +28,17 @@ def ai(
             encoding="utf-8",
         ),
     ] = None,
+    max_tokens: Annotated[
+        Optional[int],
+        typer.Option(
+            "--max-tokens",
+            "-t",
+            help="Maximum number of tokens allowed in the response.",
+        ),
+    ] = 2048,
 ) -> None:
     """
     Interact with CodeStar using natural language.
-
-    Args:
-        prompt (str): The natural language prompt.
-        code: (str, optional): Code file to include in the prompt.
 
     Examples:
     ```shell
@@ -57,17 +61,17 @@ def ai(
                     ),
                 },
             ],
-            max_tokens=2048,
+            max_tokens=max_tokens,
         )
 
         if output:
             with output as file:
-                file.write(response.choices[0].message.content)
+                file.write(str(response.choices[0].message.content))
 
             print(f"Output [bold green]saved[/bold green] to {output.name}.")
 
         else:
-            print_highlighted(response.choices[0].message.content)
+            print(create_panel("CodeStar", str(response.choices[0].message.content)))
 
     except Exception as error:
         print(f"[bold red]Error[/bold red]: {error}")
